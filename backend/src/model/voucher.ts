@@ -2,7 +2,10 @@ import mongoose from "mongoose";
 
 const voucherSchema = new mongoose.Schema(
   {
-    name: String,
+    name: {
+      type: String,
+      required: true,
+    },
     value: {
       type: Number,
       required: true,

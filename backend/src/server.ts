@@ -1,7 +1,7 @@
 import express, { Application, Request, Response } from "express";
 import mongoose from "mongoose";
 import cors from "cors";
-import ethers from "ethers";
+import { ethers } from "ethers";
 import VoucherModel from "./model/voucher";
 import Voucher from "../../build/contracts/Voucher.json";
 
@@ -58,28 +58,41 @@ const listenToEvents = () => {
 
   const networkId = "5777";
 
-  const voucher = new ethers.Contract(
+  const voucherContract = new ethers.Contract(
     Voucher.networks[networkId].address,
     Voucher.abi,
     provider
   );
 
-  voucher.on("VoucherCreated", async (value, creator, voucher, date) => {
-    console.log(
-      `value ${value} creator ${creator} voucher ${voucher} date ${new Date(
-        date.toNumber() * 1000
-      ).toLocaleString()} `
-    );
+  voucherContract.on(
+    "VoucherCreated",
+    async (value, creator, voucher, date) => {
+      console.log(
+        `value ${value} creator ${creator} voucher ${voucher} date ${new Date(
+          date.toNumber() * 1000
+        ).toLocaleString()} `
+      );
 
-    const voucherFind = await VoucherModel.findOne({ name: voucher });
+      const voucherFind = await VoucherModel.findOne({ name: voucher });
 
-    if (voucherFind) {
-      voucherFind.creator = creator;
-      voucherFind.value = value;
-      voucherFind.date = new Date(date.toNumber() * 1000).toLocaleString();
-      await voucherFind.save();
+      if (voucherFind) {
+        voucherFind.creator = creator;
+        voucherFind.value = value;
+        voucherFind.date = new Date(date.toNumber() * 1000).toLocaleString();
+        await voucherFind.save();
+      }
     }
-  });
+  );
+
+  voucherContract.on(
+    "VoucherReedeemed",
+    async (voucher, value, reedeemer, date) => {
+      console.log(
+        "Reedeemed ==>",
+        `voucher ${voucher} value ${value} reedeemer ${reedeemer}`
+      );
+    }
+  );
 };
 
 listenToEvents();
