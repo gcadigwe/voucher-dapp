@@ -85,7 +85,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [],
@@ -98,7 +99,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [],
@@ -111,7 +113,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [],
@@ -124,7 +127,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -143,14 +147,16 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [],
       "name": "sendEther",
       "outputs": [],
       "stateMutability": "payable",
-      "type": "function"
+      "type": "function",
+      "payable": true
     },
     {
       "inputs": [
@@ -181,7 +187,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -5758,12 +5765,13 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0xE29C442324D423198Fbda7573c12983B9151e013",
-      "transactionHash": "0x16b9dc727f857b049bcdbe9a37df44d0554f3f24bd5ed5ad2df81d58577a55d6"
+      "address": "0xBac76e110E16E5fcd7B36F041C5B07aa33026Bb4",
+      "transactionHash": "0x65b3affc45374543dcc2804e1d2383b39bee4ad4392151436d796fb9652adf6d"
     }
   },
   "schemaVersion": "3.4.1",
-  "updatedAt": "2021-06-02T21:03:48.114Z",
+  "updatedAt": "2021-06-03T00:32:06.113Z",
+  "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
     "methods": {},
