@@ -7,7 +7,7 @@ interface ListProps {
 }
 
 const Left: React.FC<ListProps> = ({ signerAd, contract }) => {
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     // contract.createVoucher;
   };

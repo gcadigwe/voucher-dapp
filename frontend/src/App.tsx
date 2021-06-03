@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { FormEventHandler, useEffect, useState } from "react";
 import "./App.css";
 import { ethers } from "ethers";
 import Voucher from "./contracts/Voucher.json";
@@ -46,8 +46,26 @@ function App() {
 
   return (
     <div className="app">
-      <Left signerAd={signerAddress} contract={contract} />
-      <Right signerAd={signerAddress} />
+      <div className="left">
+        <h2>Creator - {signerAddress} </h2>
+        <form className="left__form">
+          <label>Voucher Name</label>
+          <input className="left__name" type="text" />
+          <label>Voucher Value</label>
+          <input type="number" className="left__number" min="0.1" max="5" />
+
+          <button className="left__btn">Create</button>
+        </form>
+      </div>
+
+      <div className="right">
+        <h2>Reedeemer - {signerAddress} </h2>
+        <form className="right__form">
+          <label>Input voucher name to reedeem</label>
+          <input className="right__name" type="text" />
+          <button className="right__btn">Reedem</button>
+        </form>
+      </div>
     </div>
   );
 }

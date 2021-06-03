@@ -5,3 +5,70 @@
 .app {
   display: flex;
 }
+
+.left {
+  min-width: 50%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: steelblue;
+}
+
+.left__form {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+.left__name {
+  margin-bottom: 10px;
+  width: 250px;
+}
+
+.left__btn {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+label {
+  color: #fff;
+  margin-bottom: 5px;
+}
+
+.left__btn:hover {
+  background-color: transparent;
+}
+
+.left__btn:focus {
+  outline: none;
+}
+
+.right {
+  background-color: tomato;
+  min-width: 50%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.right__form {
+  display: flex;
+  flex-direction: column;
+  margin-top: 100px;
+}
+
+label {
+  color: #fff;
+  margin-bottom: 5px;
+}
+
+.right__name {
+  margin-bottom: 10px;
+  width: 250px;
+}
