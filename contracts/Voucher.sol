@@ -21,9 +21,9 @@ contract Voucher {
         uint _date
         );
     
-    function sendEther() external payable {
-        
-    }
+   constructor()payable{
+       
+   }
 
     mapping(address => mapping(uint => uint)) public coupons;
     mapping(uint => uint) public voucherPrice;

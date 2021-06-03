@@ -1,0 +1,40 @@
+.left {
+  min-width: 50%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: steelblue;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+.name {
+  margin-bottom: 10px;
+  width: 250px;
+}
+
+.btn {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+label {
+  color: #fff;
+  margin-bottom: 5px;
+}
+
+.btn:hover {
+  background-color: transparent;
+}
+
+.btn:focus {
+  outline: none;
+}
