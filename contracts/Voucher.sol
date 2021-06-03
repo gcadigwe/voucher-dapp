@@ -3,7 +3,6 @@ pragma solidity >=0.4.22 <0.9.0;
 
 contract Voucher {
 
-    // address public admin;
     address payable public reedeemer;
     address public creator;
     uint public value;
@@ -29,11 +28,6 @@ contract Voucher {
     mapping(address => mapping(uint => uint)) public coupons;
     mapping(uint => uint) public voucherPrice;
 
-    // constructor(address _admin){
-    //     admin = _admin;
-    //     // reedeemer = _reedeemer;
-        
-    // }
 
 
     function createVoucher(uint _value, uint _voucher) public{
@@ -50,13 +44,6 @@ contract Voucher {
     }
 
     function reedemVoucher( uint _voucher) public {
-        // require(_reedeemer == admin, 'creator cannot redeem coupon');
-        // require(_reedeemer == reedeemer, 'cannot reedem');
-        // _value = voucherPrice[_voucher];
-        
-        // _reedeemer = reedeemer;
-        
-        // require(voucherPrice[_voucher] == true, 'value does not match or voucher not found');
         
         value = voucherPrice[_voucher];
         
