@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import Voucher from "./contracts/Voucher.json";
-import { find } from "./functions/voucher";
+import { find, create } from "./functions/voucher";
 import "./App.css";
 
 function App() {
@@ -30,6 +30,20 @@ function App() {
     const txResponse = await contract.createVoucher(1000, 5115);
     const txReceipt = await txResponse.wait();
     console.log(txReceipt);
+
+    contract.on("VoucherCreated", async (value, creator, voucher, date) => {
+      console.log(
+        `value ${value} creator ${creator} voucher ${voucher} date ${new Date(
+          date.toNumber() * 1000
+        ).toLocaleString()} `
+      );
+      const used = false;
+      create(voucher.toNumber(), value.toNumber(), creator, used).then(
+        (res) => {
+          console.log(res);
+        }
+      );
+    });
   };
 
   // loadTx(5111);
@@ -60,10 +74,22 @@ function App() {
     }
   };
 
+  // const listenToEvents = () => {
+  //   contract.on("VoucherCreated", async (value, creator, voucher, date) => {
+  //     console.log(
+  //       `value ${value} creator ${creator} voucher ${voucher} date ${new Date(
+  //         date.toNumber() * 1000
+  //       ).toLocaleString()} `
+  //     );
+  //   });
+  // };
+
+  // listenToEvents();
+
   return (
     <div className="App">
       Hello world
-      <button onClick={() => loadTx(5111)}>Submit</button>
+      <button onClick={() => loadTx(5115)}>Submit</button>
     </div>
   );
 }
