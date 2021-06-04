@@ -1,12 +1,38 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import Voucher from "./contracts/Voucher.json";
+import { find } from "./functions/voucher";
 import "./App.css";
 
 function App() {
+  const [contract, setContract] = useState(null);
   useEffect(() => {
     loadData();
   }, []);
+
+  const loadTx = async (voucherName) => {
+    // console.log(voucherTx);
+    // if (name) {
+    //   await axios.get("");
+    // }
+
+    find(voucherName).then((res) => {
+      if (res.data.exist) {
+        return console.log("cannot create");
+      }
+
+      console.log("next");
+      createVoucher();
+    });
+  };
+
+  const createVoucher = async () => {
+    const txResponse = await contract.createVoucher(1000, 5115);
+    const txReceipt = await txResponse.wait();
+    console.log(txReceipt);
+  };
+
+  // loadTx(5111);
 
   const loadData = async () => {
     if (window.ethereum) {
@@ -21,16 +47,25 @@ function App() {
         console.log(parseInt(res._hex));
       });
 
+      setContract(voucherContract);
+
       // const txResponse = await voucherContract.createVoucher(1000, 5112);
+
       // const txReceipt = await txResponse.wait();
       // console.log(txReceipt);
 
-      const txResponse = await voucherContract.reedemVoucher(5112);
-      const txReceipt = await txResponse.wait();
-      console.log(txReceipt);
+      // const txResponse = await voucherContract.reedemVoucher(5112);
+      // const txReceipt = await txResponse.wait();
+      // console.log(txReceipt);
     }
   };
-  return <div className="App">Hello world</div>;
+
+  return (
+    <div className="App">
+      Hello world
+      <button onClick={() => loadTx(5111)}>Submit</button>
+    </div>
+  );
 }
 
 export default App;
