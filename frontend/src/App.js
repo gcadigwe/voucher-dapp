@@ -146,7 +146,7 @@ function App() {
       const balance = signer.getBalance().then((res) => {
         const finalBalance = parseInt(res._hex);
         let etherString = finalBalance / 1000000000000000000;
-        setCurrentSignerBalance(etherString.toFixed(2));
+        setCurrentSignerBalance(etherString);
       });
 
       const CurrentSigneraddress = signer.getAddress().then((res) => {
