@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import Voucher from "./contracts/Voucher.json";
-import { find, create } from "./functions/voucher";
+import {
+  find,
+  create,
+  redeem,
+  findredeemer,
+  findall,
+  check,
+} from "./functions/voucher";
 import "./App.css";
 
 function App() {
@@ -11,7 +18,7 @@ function App() {
     loadData();
   }, []);
 
-  const loadTx = async (voucherName) => {
+  const createTx = async (voucherName) => {
     find(voucherName).then((res) => {
       if (res.data.exist) {
         return console.log("cannot create");
@@ -21,6 +28,8 @@ function App() {
       createVoucher();
     });
   };
+
+  //Create Voucher
   const createVoucher = async () => {
     const txResponse = await contract.createVoucher(1000, 5115);
     const txReceipt = await txResponse.wait();
@@ -41,9 +50,28 @@ function App() {
     });
   };
 
+  //Redeem Voucher
+
+  const redeemVoucher = async () => {
+    const txResponse = await contract.reedemVoucher(5112);
+    const txReceipt = await txResponse.wait();
+    console.log(txReceipt);
+
+    contract.on("VoucherReedeemed", async (voucher, value, reedeemer, date) => {
+      console.log(
+        `voucher ${voucher} value ${value} redeemer ${redeemer} date ${new Date(
+          date.toNumber() * 1000
+        ).toLocaleString()}`
+      );
+      redeem(voucher.toNumber(), value.toNumber(), reedeemer).then((res) => {
+        console.log(res);
+      });
+    });
+  };
+
   const handleCreateVoucher = (e) => {
     e.preventDefault();
-    loadTx(5116);
+    createTx(5116);
   };
 
   // loadTx(5111);
@@ -67,31 +95,10 @@ function App() {
       });
 
       setContract(voucherContract);
-
-      // const txResponse = await voucherContract.createVoucher(1000, 5112);
-
-      // const txReceipt = await txResponse.wait();
-      // console.log(txReceipt);
-
-      // const txResponse = await voucherContract.reedemVoucher(5112);
-      // const txReceipt = await txResponse.wait();
-      // console.log(txReceipt);
     }
   };
 
   console.log(CurrentSigneraddress);
-
-  // const listenToEvents = () => {
-  //   contract.on("VoucherCreated", async (value, creator, voucher, date) => {
-  //     console.log(
-  //       `value ${value} creator ${creator} voucher ${voucher} date ${new Date(
-  //         date.toNumber() * 1000
-  //       ).toLocaleString()} `
-  //     );
-  //   });
-  // };
-
-  // listenToEvents();
 
   return (
     <div className="app">

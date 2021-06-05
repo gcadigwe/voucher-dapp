@@ -28,3 +28,8 @@ export const findredeemer = async (redeemerName) =>
   await axios.post(`${process.env.REACT_APP_API}/voucher/findredeemer`, {
     redeemer: redeemerName,
   });
+
+export const check = async (voucherName) =>
+  await axios.post(`${process.env.REACT_APP_API}/voucher/check`, {
+    name: voucherName,
+  });
