@@ -14,19 +14,31 @@ import "./App.css";
 function App() {
   const [contract, setContract] = useState(null);
   const [CurrentSigneraddress, setCurrentSigneraddress] = useState("0x0000");
-  const [CurrentSignerBalance, setCurrentSignerBalance] = useEffect(0);
+  const [CurrentSignerBalance, setCurrentSignerBalance] = useState(0);
   const [foundVouchers, setFoundVouchers] = useState([]);
+  const [foundRedeemer, setFoundRedeemerVouchers] = useState([]);
 
   useEffect(() => {
     loadData();
     findallVouchers();
-  }, [CurrentSigneraddress]);
+    findallVouchersRedeemed();
+  }, [CurrentSigneraddress, foundVouchers, foundRedeemer]);
 
   //find all vouchers created by this current admin/signer
 
   const findallVouchers = () => {
     findall(CurrentSigneraddress).then((res) => {
       console.log(res);
+      setFoundVouchers(res.data);
+    });
+  };
+
+  // find all vouchers redeemed by this address/user
+
+  const findallVouchersRedeemed = () => {
+    findredeemer(CurrentSigneraddress).then((res) => {
+      console.log(res);
+      setFoundRedeemerVouchers(res.data);
     });
   };
 
@@ -81,7 +93,7 @@ function App() {
 
     contract.on("VoucherReedeemed", async (voucher, value, reedeemer, date) => {
       console.log(
-        `voucher ${voucher} value ${value} redeemer ${redeemer} date ${new Date(
+        `voucher ${voucher} value ${value} redeemer ${reedeemer} date ${new Date(
           date.toNumber() * 1000
         ).toLocaleString()}`
       );
@@ -93,7 +105,7 @@ function App() {
 
   const handleCreateVoucher = (e) => {
     e.preventDefault();
-    createTx(5116);
+    // createTx(5116);
   };
 
   // loadTx(5111);
@@ -135,10 +147,15 @@ function App() {
         </h2>
         <div className="vouchers-created">
           <h2>Vouchers Created by this address</h2>
-          {/* <ul>
-            <li>Name: 5112, <span>Value: 100</span></li>
-            <li>Name: 5112, <span>Value: 100</span></li>
-          </ul> */}
+          <ul>
+            {foundVouchers &&
+              foundVouchers.map((foundVoucher) => (
+                <li key={foundVoucher._id}>
+                  Name: {foundVoucher.name},{" "}
+                  <span>Value: {foundVoucher.value}</span>
+                </li>
+              ))}
+          </ul>
         </div>
         <div className="left-input-container">
           <h2>Create Voucher</h2>
@@ -163,10 +180,12 @@ function App() {
         </h2>
         <div className="vouchers-redeemed">
           <h2>Vouchers Redeemed by this address</h2>
-          {/* <ul>
-            <li>Name: 5112, <span>Value: 100</span></li>
-            <li>Name: 5112, <span>Value: 100</span></li>
-          </ul>  */}
+          <ul>
+            {foundRedeemer &&
+              foundRedeemer.map((foundvoucher) => (
+                <li key={foundvoucher._id}>Name: {foundvoucher.name}</li>
+              ))}
+          </ul>
         </div>
         <div className="right-input-container">
           <h2>Redeem Voucher</h2>

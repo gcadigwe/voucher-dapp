@@ -192,10 +192,12 @@
 
 .vouchers-created > h2 {
   text-align: center;
+  padding: 3px;
 }
 
 .vouchers-created > ul {
   display: flex;
+  font-size: small;
 }
 
 .vouchers-created ul li {
@@ -220,10 +222,12 @@
 
 .vouchers-redeemed > h2 {
   text-align: center;
+  padding: 3px;
 }
 
 .vouchers-redeemed > ul {
   display: flex;
+  font-size: small;
 }
 
 .vouchers-redeemed ul li {
