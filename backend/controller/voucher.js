@@ -31,7 +31,7 @@ exports.redeem = async (req, res) => {
       used: true,
     });
 
-    res.json(update);
+    res.json(redeem);
   } catch (err) {
     console.log(err);
     res.status(400).send("Create Redeemer Failed");
@@ -81,6 +81,20 @@ exports.findVoucherRedeemedByCurrentRedeemer = async (req, res) => {
   } else {
     res.json({
       message: "Nothing found",
+    });
+  }
+};
+
+exports.checkUsedVoucher = async (req, res) => {
+  const { name } = req.body;
+
+  const used = await Voucher.findOne({ name: name }).exec();
+
+  if (used) {
+    res.json(used);
+  } else {
+    res.json({
+      message: "voucher not found",
     });
   }
 };

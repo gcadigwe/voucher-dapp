@@ -14,9 +14,21 @@ import "./App.css";
 function App() {
   const [contract, setContract] = useState(null);
   const [CurrentSigneraddress, setCurrentSigneraddress] = useState("0x0000");
+  const [CurrentSignerBalance, setCurrentSignerBalance] = useEffect(0);
+  const [foundVouchers, setFoundVouchers] = useState([]);
+
   useEffect(() => {
     loadData();
-  }, []);
+    findallVouchers();
+  }, [CurrentSigneraddress]);
+
+  //find all vouchers created by this current admin/signer
+
+  const findallVouchers = () => {
+    findall(CurrentSigneraddress).then((res) => {
+      console.log(res);
+    });
+  };
 
   const createVoucherCheck = async (voucherName) => {
     find(voucherName).then((res) => {
@@ -97,6 +109,7 @@ function App() {
 
       const balance = signer.getBalance().then((res) => {
         console.log(parseInt(res._hex));
+        setCurrentSignerBalance(parseInt(res._hex));
       });
 
       const CurrentSigneraddress = signer.getAddress().then((res) => {
@@ -118,7 +131,7 @@ function App() {
           Current Creator's address:
           <span className="address"> {CurrentSigneraddress}</span>
           <br />
-          Balance: <span className="address"></span>
+          Balance: <span className="address">{CurrentSignerBalance}</span>
         </h2>
         <div className="vouchers-created">
           <h2>Vouchers Created by this address</h2>
@@ -144,11 +157,9 @@ function App() {
         <h1>Dapp</h1>
         <h2>
           Current Redeemer's address:
-          <span className="address">
-            0x37b6183D7dfA026488841Dbb601Cd8B90D478529
-          </span>
+          <span className="address">{CurrentSigneraddress}</span>
           <br />
-          Balance: <span className="address"></span>
+          Balance: <span className="address">{CurrentSignerBalance}</span>
         </h2>
         <div className="vouchers-redeemed">
           <h2>Vouchers Redeemed by this address</h2>
