@@ -17,11 +17,20 @@
 
 .left > h1 {
   position: absolute;
-  top: 0;
-  right: 5px;
+  top: 2px;
+  right: 2px;
+  margin: 0;
+}
+
+.left > h2 {
+  position: absolute;
+  top: 50px;
+  font-size: small;
 }
 
 .left-input-container {
+  position: absolute;
+  top: 400px;
   border-radius: 15px;
   background-color: #fce299;
   display: flex;
@@ -93,9 +102,19 @@
   top: 0;
   left: 5px;
   color: #fff;
+  margin: 0;
+}
+
+.right > h2 {
+  position: absolute;
+  top: 50px;
+  font-size: small;
+  color: #fff;
 }
 
 .right-input-container {
+  position: absolute;
+  top: 400px;
   border-radius: 15px;
   background-color: #51758b;
   display: flex;
@@ -154,4 +173,64 @@
 
 .right-btn:focus {
   outline: none;
+}
+
+/*new feature */
+.vouchers-created {
+  background-color: #fce299;
+  position: absolute;
+  top: 150px;
+  width: 400px;
+  height: 200px;
+  padding: 5px;
+  border-radius: 15px;
+}
+
+.vouchers-created > h2 {
+  font-size: 1rem;
+}
+
+.vouchers-created > h2 {
+  text-align: center;
+}
+
+.vouchers-created > ul {
+  display: flex;
+}
+
+.vouchers-created ul li {
+  list-style-type: none;
+  margin-right: 25px;
+}
+
+.vouchers-redeemed {
+  background-color: #51758b;
+  position: absolute;
+  top: 150px;
+  width: 400px;
+  height: 200px;
+  padding: 5px;
+  color: #fff;
+  border-radius: 15px;
+}
+
+.vouchers-redeemed > h2 {
+  font-size: 1rem;
+}
+
+.vouchers-redeemed > h2 {
+  text-align: center;
+}
+
+.vouchers-redeemed > ul {
+  display: flex;
+}
+
+.vouchers-redeemed ul li {
+  list-style-type: none;
+  margin-right: 25px;
+}
+
+.address {
+  font-size: 1rem;
 }

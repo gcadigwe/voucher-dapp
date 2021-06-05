@@ -54,3 +54,33 @@ exports.find = async (req, res) => {
     console.log("no voucher found");
   }
 };
+
+exports.findVoucherCreatedByCurrentCreator = async (req, res) => {
+  const { creator } = req.body;
+
+  const vouchers = await Voucher.find({ creator: creator }).exec();
+
+  if (vouchers) {
+    res.json(vouchers);
+  } else {
+    {
+      res.json({
+        message: "Can't find any voucher created by this user",
+      });
+    }
+  }
+};
+
+exports.findVoucherRedeemedByCurrentRedeemer = async (req, res) => {
+  const { redeemer } = req.body;
+
+  const redeemers = await Redeem.find({ redeemer: redeemer }).exec();
+
+  if (redeemers) {
+    res.json(redeemers);
+  } else {
+    res.json({
+      message: "Nothing found",
+    });
+  }
+};

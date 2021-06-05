@@ -6,16 +6,12 @@ import "./App.css";
 
 function App() {
   const [contract, setContract] = useState(null);
+  const [CurrentSigneraddress, setCurrentSigneraddress] = useState("0x0000");
   useEffect(() => {
     loadData();
   }, []);
 
   const loadTx = async (voucherName) => {
-    // console.log(voucherTx);
-    // if (name) {
-    //   await axios.get("");
-    // }
-
     find(voucherName).then((res) => {
       if (res.data.exist) {
         return console.log("cannot create");
@@ -25,7 +21,6 @@ function App() {
       createVoucher();
     });
   };
-
   const createVoucher = async () => {
     const txResponse = await contract.createVoucher(1000, 5115);
     const txReceipt = await txResponse.wait();
@@ -48,7 +43,7 @@ function App() {
 
   const handleCreateVoucher = (e) => {
     e.preventDefault();
-    loadTx(5111);
+    loadTx(5116);
   };
 
   // loadTx(5111);
@@ -66,6 +61,11 @@ function App() {
         console.log(parseInt(res._hex));
       });
 
+      const CurrentSigneraddress = signer.getAddress().then((res) => {
+        // console.log(res.toString());
+        setCurrentSigneraddress(res);
+      });
+
       setContract(voucherContract);
 
       // const txResponse = await voucherContract.createVoucher(1000, 5112);
@@ -78,6 +78,8 @@ function App() {
       // console.log(txReceipt);
     }
   };
+
+  console.log(CurrentSigneraddress);
 
   // const listenToEvents = () => {
   //   contract.on("VoucherCreated", async (value, creator, voucher, date) => {
@@ -95,9 +97,22 @@ function App() {
     <div className="app">
       <div className="left">
         <h1>Voucher</h1>
+        <h2>
+          Current Creator's address:
+          <span className="address"> {CurrentSigneraddress}</span>
+          <br />
+          Balance: <span className="address"></span>
+        </h2>
+        <div className="vouchers-created">
+          <h2>Vouchers Created by this address</h2>
+          {/* <ul>
+            <li>Name: 5112, <span>Value: 100</span></li>
+            <li>Name: 5112, <span>Value: 100</span></li>
+          </ul> */}
+        </div>
         <div className="left-input-container">
           <h2>Create Voucher</h2>
-          <form onSubmit={handleCreateVoucher} className="left-form">
+          <form className="left-form">
             <label>VOUCHER NAME</label>
             <input className="left-input" type="number" />
 
@@ -110,6 +125,21 @@ function App() {
       </div>
       <div className="right">
         <h1>Dapp</h1>
+        <h2>
+          Current Redeemer's address:
+          <span className="address">
+            0x37b6183D7dfA026488841Dbb601Cd8B90D478529
+          </span>
+          <br />
+          Balance: <span className="address"></span>
+        </h2>
+        <div className="vouchers-redeemed">
+          <h2>Vouchers Redeemed by this address</h2>
+          {/* <ul>
+            <li>Name: 5112, <span>Value: 100</span></li>
+            <li>Name: 5112, <span>Value: 100</span></li>
+          </ul>  */}
+        </div>
         <div className="right-input-container">
           <h2>Redeem Voucher</h2>
           <form className="right-form">
