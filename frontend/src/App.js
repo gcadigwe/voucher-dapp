@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import Voucher from "./contracts/Voucher.json";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import {
   find,
   create,
@@ -17,12 +20,14 @@ function App() {
   const [CurrentSignerBalance, setCurrentSignerBalance] = useState(0);
   const [foundVouchers, setFoundVouchers] = useState([]);
   const [foundRedeemer, setFoundRedeemerVouchers] = useState([]);
+  const [nameValue, setNameValue] = useState("");
+  const [voucherValue, setVoucherValue] = useState("");
 
   useEffect(() => {
     loadData();
     findallVouchers();
     findallVouchersRedeemed();
-  }, [CurrentSigneraddress, CurrentSignerBalance]);
+  }, [CurrentSigneraddress]);
 
   //checks if account was changed in metamask and reloads after 100ms
   if (window.ethereum) {
@@ -51,14 +56,14 @@ function App() {
     });
   };
 
-  const createVoucherCheck = async (voucherName) => {
+  const createVoucherCheck = async (voucherName, voucherValue) => {
     find(voucherName).then((res) => {
       if (res.data.exist) {
-        return console.log("cannot create");
+        return toast.error(`Voucher ${voucherName} Already Created`);
       }
 
       console.log("next");
-      createVoucher();
+      createVoucher(voucherName, voucherValue);
     });
   };
 
@@ -73,8 +78,13 @@ function App() {
   };
 
   //Create Voucher
-  const createVoucher = async () => {
-    const txResponse = await contract.createVoucher(1000, 5115);
+  const createVoucher = async (voucherName, voucherValue) => {
+    const finalValue = ethers.utils.parseEther(voucherValue.toLocaleString());
+    console.log(parseInt(finalValue._hex));
+    const txResponse = await contract.createVoucher(
+      voucherName,
+      finalValue._hex
+    );
     const txReceipt = await txResponse.wait();
     console.log(txReceipt);
 
@@ -85,11 +95,13 @@ function App() {
         ).toLocaleString()} `
       );
       const used = false;
-      create(voucher.toNumber(), value.toNumber(), creator, used).then(
-        (res) => {
-          console.log(res);
-        }
-      );
+      create(voucherName, voucherValue, creator, used).then((res) => {
+        console.log(res);
+      });
+      toast.success(`Voucher created successfully`);
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
     });
   };
 
@@ -106,7 +118,7 @@ function App() {
           date.toNumber() * 1000
         ).toLocaleString()}`
       );
-      redeem(voucher.toNumber(), value.toNumber(), reedeemer).then((res) => {
+      redeem(voucher, value, reedeemer).then((res) => {
         console.log(res);
       });
     });
@@ -115,6 +127,9 @@ function App() {
   const handleCreateVoucher = (e) => {
     e.preventDefault();
     // createTx(5116);
+    createVoucherCheck(nameValue, voucherValue);
+    setVoucherValue("");
+    setNameValue("");
   };
 
   // loadTx(5111);
@@ -145,68 +160,86 @@ function App() {
   console.log(CurrentSigneraddress);
 
   return (
-    <div className="app">
-      <div className="left">
-        <h1>Voucher</h1>
-        <h2>
-          Current Creator's address:
-          <span className="address"> {CurrentSigneraddress}</span>
-          <br />
-          Balance: <span className="address">{CurrentSignerBalance}</span>
-        </h2>
-        <div className="vouchers-created">
-          <h2>Vouchers Created by this address</h2>
-          <ul>
-            {foundVouchers &&
-              foundVouchers.map((foundVoucher) => (
-                <li key={foundVoucher._id}>
-                  Name: {foundVoucher.name},{" "}
-                  <span>Value: {foundVoucher.value}</span>
-                </li>
-              ))}
-          </ul>
+    <>
+      <ToastContainer />
+      <div className="app">
+        <div className="left">
+          <h1>Voucher</h1>
+          <h2>
+            Current Creator's address:
+            <span className="address"> {CurrentSigneraddress}</span>
+            <br />
+            Balance: <span className="address">{CurrentSignerBalance}</span>
+          </h2>
+          <div className="vouchers-created">
+            <h2>Vouchers Created by this address</h2>
+            <ul>
+              {foundVouchers &&
+                foundVouchers.map((foundVoucher) => (
+                  <li key={foundVoucher._id}>
+                    Name: {foundVoucher.name},{" "}
+                    <span>Value: {foundVoucher.value}eth</span>
+                  </li>
+                ))}
+            </ul>
+          </div>
+          <div className="left-input-container">
+            <h2>Create Voucher</h2>
+            <form onSubmit={handleCreateVoucher} className="left-form">
+              <label>VOUCHER NAME</label>
+              <input
+                className="left-input"
+                type="number"
+                required
+                value={nameValue}
+                onChange={(e) => setNameValue(e.target.value)}
+              />
+
+              <label>
+                VOUCHER VALUE<small>(Should be in ether)</small>
+              </label>
+              <input
+                className="left-input"
+                type="number"
+                required
+                max="0.5"
+                value={voucherValue}
+                onChange={(e) => setVoucherValue(e.target.value)}
+              />
+
+              <button className="left-btn">CREATE</button>
+            </form>
+          </div>
         </div>
-        <div className="left-input-container">
-          <h2>Create Voucher</h2>
-          <form className="left-form">
-            <label>VOUCHER NAME</label>
-            <input className="left-input" type="number" />
+        <div className="right">
+          <h1>Dapp</h1>
+          <h2>
+            Current Redeemer's address:
+            <span className="address">{CurrentSigneraddress}</span>
+            <br />
+            Balance: <span className="address">{CurrentSignerBalance}</span>
+          </h2>
+          <div className="vouchers-redeemed">
+            <h2>Vouchers Redeemed by this address</h2>
+            <ul>
+              {foundRedeemer &&
+                foundRedeemer.map((foundvoucher) => (
+                  <li key={foundvoucher._id}>Name: {foundvoucher.name}</li>
+                ))}
+            </ul>
+          </div>
+          <div className="right-input-container">
+            <h2>Redeem Voucher</h2>
+            <form className="right-form">
+              <label>VOUCHER NAME</label>
+              <input className="right-input" type="number" />
 
-            <label>VOUCHER VALUE</label>
-            <input className="left-input" type="number" />
-
-            <button className="left-btn">CREATE</button>
-          </form>
+              <button className="right-btn">REDEEM</button>
+            </form>
+          </div>
         </div>
       </div>
-      <div className="right">
-        <h1>Dapp</h1>
-        <h2>
-          Current Redeemer's address:
-          <span className="address">{CurrentSigneraddress}</span>
-          <br />
-          Balance: <span className="address">{CurrentSignerBalance}</span>
-        </h2>
-        <div className="vouchers-redeemed">
-          <h2>Vouchers Redeemed by this address</h2>
-          <ul>
-            {foundRedeemer &&
-              foundRedeemer.map((foundvoucher) => (
-                <li key={foundvoucher._id}>Name: {foundvoucher.name}</li>
-              ))}
-          </ul>
-        </div>
-        <div className="right-input-container">
-          <h2>Redeem Voucher</h2>
-          <form className="right-form">
-            <label>VOUCHER NAME</label>
-            <input className="right-input" type="number" />
-
-            <button className="right-btn">REDEEM</button>
-          </form>
-        </div>
-      </div>
-    </div>
+    </>
   );
 }
 

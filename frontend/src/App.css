@@ -198,11 +198,12 @@
 .vouchers-created > ul {
   display: flex;
   font-size: small;
+  flex-direction: column;
 }
 
 .vouchers-created ul li {
   list-style-type: none;
-  margin-right: 25px;
+  margin-top: 2px;
 }
 
 .vouchers-redeemed {
