@@ -22,7 +22,16 @@ function App() {
     loadData();
     findallVouchers();
     findallVouchersRedeemed();
-  }, [CurrentSigneraddress, foundVouchers, foundRedeemer]);
+  }, [CurrentSigneraddress, CurrentSignerBalance]);
+
+  //checks if account was changed in metamask and reloads after 100ms
+  if (window.ethereum) {
+    window.ethereum.on("accountsChanged", function () {
+      setTimeout(() => {
+        window.location.reload();
+      }, 100);
+    });
+  }
 
   //find all vouchers created by this current admin/signer
 
