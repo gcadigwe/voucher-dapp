@@ -43,7 +43,6 @@ function App() {
 
   const findallVouchers = () => {
     findall(CurrentSigneraddress).then((res) => {
-      console.log(res);
       setFoundVouchers(res.data);
     });
   };
@@ -52,7 +51,6 @@ function App() {
 
   const findallVouchersRedeemed = () => {
     findredeemer(CurrentSigneraddress).then((res) => {
-      console.log(res);
       setFoundRedeemerVouchers(res.data);
     });
   };
@@ -63,7 +61,6 @@ function App() {
         return toast.error(`Voucher ${voucherName} Already Created`);
       }
 
-      console.log("next");
       createVoucher(voucherName, voucherValue);
     });
   };
@@ -82,11 +79,8 @@ function App() {
   //Create Voucher
   const createVoucher = async (voucherName, voucherValue) => {
     const finalValue = ethers.utils.parseEther(voucherValue);
-    console.log(typeof voucherValue);
-    // console.log(parseInt(finalValue._hex));
     const txResponse = await contract.createVoucher(finalValue, voucherName);
     const txReceipt = await txResponse.wait();
-    console.log(txReceipt);
 
     contract.on("VoucherCreated", async (value, creator, voucher, date) => {
       console.log(
@@ -95,9 +89,7 @@ function App() {
         ).toLocaleString()} `
       );
       const used = false;
-      create(voucherName, voucherValue, creator, used).then((res) => {
-        console.log(res);
-      });
+      create(voucherName, voucherValue, creator, used).then((res) => {});
       toast.success(`Voucher created successfully`);
       setTimeout(() => {
         window.location.reload();
@@ -108,12 +100,8 @@ function App() {
   //Redeem Voucher
 
   const redeemVoucher = async (voucherName) => {
-    // const finalValue = ether.utils.pa
-    // const finalValue = ethers.utils.parseEther(voucherValue.toLocaleString());
-    // console.log("final value ==>", finalValue);
     const txResponse = await contract.reedemVoucher(voucherName);
     const txReceipt = await txResponse.wait();
-    console.log(txReceipt);
 
     contract.on("VoucherReedeemed", async (voucher, value, reedeemer, date) => {
       console.log(
@@ -123,18 +111,18 @@ function App() {
       );
 
       redeem(reedeemer, voucherName).then((res) => {
-        console.log(res);
+        if (res.data) {
+          toast.success(`Voucher Redeemed successfully`);
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
+        }
       });
-      toast.success(`Voucher Redeemed successfully`);
-      setTimeout(() => {
-        window.location.reload();
-      }, 2000);
     });
   };
 
   const handleCreateVoucher = (e) => {
     e.preventDefault();
-    // createTx(5116);
     createVoucherCheck(nameValue, voucherValue);
     setVoucherValue("");
     setNameValue("");
@@ -143,9 +131,8 @@ function App() {
   const handleRedeem = (e) => {
     e.preventDefault();
     redeemVoucherCheck(redeemValue);
-    // setRedeemValue("");
+    setRedeemValue("");
   };
-  // loadTx(5111);
 
   const loadData = async () => {
     if (window.ethereum) {
@@ -157,20 +144,18 @@ function App() {
       const voucherContract = new ethers.Contract(address, Voucher.abi, signer);
 
       const balance = signer.getBalance().then((res) => {
-        console.log(parseInt(res._hex));
-        setCurrentSignerBalance(parseInt(res._hex));
+        const finalBalance = parseInt(res._hex);
+        let etherString = finalBalance / 1000000000000000000;
+        setCurrentSignerBalance(etherString.toFixed(2));
       });
 
       const CurrentSigneraddress = signer.getAddress().then((res) => {
-        // console.log(res.toString());
         setCurrentSigneraddress(res);
       });
 
       setContract(voucherContract);
     }
   };
-
-  console.log(CurrentSigneraddress);
 
   return (
     <>
@@ -182,7 +167,7 @@ function App() {
             Current Creator's address:
             <span className="address"> {CurrentSigneraddress}</span>
             <br />
-            Balance: <span className="address">{CurrentSignerBalance}</span>
+            Balance: <span className="address">{CurrentSignerBalance}ETH</span>
           </h2>
           <div className="vouchers-created">
             <h2>Vouchers Created by this address</h2>
@@ -230,7 +215,7 @@ function App() {
             Current Redeemer's address:
             <span className="address">{CurrentSigneraddress}</span>
             <br />
-            Balance: <span className="address">{CurrentSignerBalance}</span>
+            Balance: <span className="address">{CurrentSignerBalance}ETH</span>
           </h2>
           <div className="vouchers-redeemed">
             <h2>Vouchers Redeemed by this address</h2>
