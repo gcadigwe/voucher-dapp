@@ -46,6 +46,11 @@ function App() {
     });
   };
 
+  const handleCreateVoucher = (e) => {
+    e.preventDefault();
+    loadTx(5111);
+  };
+
   // loadTx(5111);
 
   const loadData = async () => {
@@ -87,9 +92,34 @@ function App() {
   // listenToEvents();
 
   return (
-    <div className="App">
-      Hello world
-      <button onClick={() => loadTx(5115)}>Submit</button>
+    <div className="app">
+      <div className="left">
+        <h1>Voucher</h1>
+        <div className="left-input-container">
+          <h2>Create Voucher</h2>
+          <form onSubmit={handleCreateVoucher} className="left-form">
+            <label>VOUCHER NAME</label>
+            <input className="left-input" type="number" />
+
+            <label>VOUCHER VALUE</label>
+            <input className="left-input" type="number" />
+
+            <button className="left-btn">CREATE</button>
+          </form>
+        </div>
+      </div>
+      <div className="right">
+        <h1>Dapp</h1>
+        <div className="right-input-container">
+          <h2>Redeem Voucher</h2>
+          <form className="right-form">
+            <label>VOUCHER NAME</label>
+            <input className="right-input" type="number" />
+
+            <button className="right-btn">REDEEM</button>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }

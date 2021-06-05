@@ -1,38 +1,157 @@
-.App {
-  text-align: center;
+@import url("https://fonts.googleapis.com/css2?family=Mulish:wght@500&display=swap");
+
+.app {
+  display: flex;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.left {
+  position: relative;
+  background-color: #f9ce5b;
+  min-width: 50%;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.left > h1 {
+  position: absolute;
+  top: 0;
+  right: 5px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.left-input-container {
+  border-radius: 15px;
+  background-color: #fce299;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 400px;
+  height: 400px;
+  padding: 10px;
+}
+
+.left-input-container > h2 {
+  margin-bottom: 40px;
+}
+
+.left-form {
+  display: flex;
+
+  flex-direction: column;
+}
+
+.left-form > label {
+  font-family: "Mulish", sans-serif;
+  font-size: small;
+  font-weight: 100;
+  margin: 5px;
+}
+
+.left-input {
+  border: none;
+  width: 220px;
+  height: 30px;
+  border-radius: 10px;
+  box-shadow: -2px 9px 7px -3px rgba(244, 181, 30, 0.52);
+  /* border-bottom: 20px; */
+  margin-bottom: 10px;
+}
+
+.left-input:focus {
+  outline: none;
+}
+
+.left-btn {
+  height: 40px;
+  border: none;
+  border-radius: 10px;
+  margin-top: 60px;
+  background-color: #f9ce5b;
+  cursor: pointer;
+  box-shadow: 1px 3px 7px 3px rgba(0, 0, 0, 0.2);
+}
+
+.left-btn:focus {
+  outline: none;
+}
+
+.right {
+  position: relative;
+  background-color: #274150;
+  min-width: 50%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.right > h1 {
+  position: absolute;
+  top: 0;
+  left: 5px;
+  color: #fff;
+}
+
+.right-input-container {
+  border-radius: 15px;
+  background-color: #51758b;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 400px;
+  height: 400px;
+  padding: 10px;
+}
+
+.right-input-container > h2 {
+  margin-bottom: 40px;
+  color: #fff;
+}
+
+.right-form {
+  display: flex;
+
+  flex-direction: column;
+}
+
+.right-form > label {
+  font-family: "Mulish", sans-serif;
+  font-size: small;
+  font-weight: 100;
+  margin: 5px;
+  color: #e0fcfb;
+}
+
+.right-input {
+  border: none;
+  width: 220px;
+  height: 30px;
+  border-radius: 10px;
+  background-color: #e0fcfb;
+  /* box-shadow: -2px 9px 7px -3px rgba(244, 181, 30, 0.52); */
+  /* border-bottom: 20px; */
+  margin-bottom: 10px;
+}
+
+.right-input:focus {
+  outline: none;
+}
+
+.right-btn {
+  height: 40px;
+  border: none;
+  border-radius: 10px;
+  margin-top: 25px;
+  background-color: #274150;
+  cursor: pointer;
+  box-shadow: 1px 3px 7px 3px rgba(0, 0, 0, 0.2);
+  color: #fff;
+}
+
+.right-btn:focus {
+  outline: none;
 }
