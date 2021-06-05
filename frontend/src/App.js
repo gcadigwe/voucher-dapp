@@ -18,7 +18,7 @@ function App() {
     loadData();
   }, []);
 
-  const createTx = async (voucherName) => {
+  const createVoucherCheck = async (voucherName) => {
     find(voucherName).then((res) => {
       if (res.data.exist) {
         return console.log("cannot create");
@@ -26,6 +26,16 @@ function App() {
 
       console.log("next");
       createVoucher();
+    });
+  };
+
+  const redeemVoucherCheck = async (voucherName) => {
+    check(voucherName).then((res) => {
+      if (res.used === true) {
+        return console.log("Voucher already used");
+      }
+      console.log("next");
+      redeemVoucher();
     });
   };
 
