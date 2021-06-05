@@ -22,6 +22,7 @@ function App() {
   const [foundRedeemer, setFoundRedeemerVouchers] = useState([]);
   const [nameValue, setNameValue] = useState("");
   const [voucherValue, setVoucherValue] = useState("");
+  const [redeemValue, setRedeemValue] = useState("");
 
   useEffect(() => {
     loadData();
@@ -69,22 +70,21 @@ function App() {
 
   const redeemVoucherCheck = async (voucherName) => {
     check(voucherName).then((res) => {
-      if (res.used === true) {
-        return console.log("Voucher already used");
+      if (res.data.used === true) {
+        return toast.error("Voucher already used");
+      } else if (res.data.message === "voucher not found") {
+        return toast.error("Voucher is invalid");
       }
-      console.log("next");
-      redeemVoucher();
+      redeemVoucher(voucherName);
     });
   };
 
   //Create Voucher
   const createVoucher = async (voucherName, voucherValue) => {
-    const finalValue = ethers.utils.parseEther(voucherValue.toLocaleString());
-    console.log(parseInt(finalValue._hex));
-    const txResponse = await contract.createVoucher(
-      voucherName,
-      finalValue._hex
-    );
+    const finalValue = ethers.utils.parseEther(voucherValue);
+    console.log(typeof voucherValue);
+    // console.log(parseInt(finalValue._hex));
+    const txResponse = await contract.createVoucher(finalValue, voucherName);
     const txReceipt = await txResponse.wait();
     console.log(txReceipt);
 
@@ -107,8 +107,11 @@ function App() {
 
   //Redeem Voucher
 
-  const redeemVoucher = async () => {
-    const txResponse = await contract.reedemVoucher(5112);
+  const redeemVoucher = async (voucherName) => {
+    // const finalValue = ether.utils.pa
+    // const finalValue = ethers.utils.parseEther(voucherValue.toLocaleString());
+    // console.log("final value ==>", finalValue);
+    const txResponse = await contract.reedemVoucher(voucherName);
     const txReceipt = await txResponse.wait();
     console.log(txReceipt);
 
@@ -118,9 +121,14 @@ function App() {
           date.toNumber() * 1000
         ).toLocaleString()}`
       );
-      redeem(voucher, value, reedeemer).then((res) => {
+
+      redeem(reedeemer, voucherName).then((res) => {
         console.log(res);
       });
+      toast.success(`Voucher Redeemed successfully`);
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
     });
   };
 
@@ -132,6 +140,11 @@ function App() {
     setNameValue("");
   };
 
+  const handleRedeem = (e) => {
+    e.preventDefault();
+    redeemVoucherCheck(redeemValue);
+    // setRedeemValue("");
+  };
   // loadTx(5111);
 
   const loadData = async () => {
@@ -202,7 +215,7 @@ function App() {
                 className="left-input"
                 type="number"
                 required
-                max="0.5"
+                max="1"
                 value={voucherValue}
                 onChange={(e) => setVoucherValue(e.target.value)}
               />
@@ -230,9 +243,14 @@ function App() {
           </div>
           <div className="right-input-container">
             <h2>Redeem Voucher</h2>
-            <form className="right-form">
+            <form onSubmit={handleRedeem} className="right-form">
               <label>VOUCHER NAME</label>
-              <input className="right-input" type="number" />
+              <input
+                className="right-input"
+                type="number"
+                value={redeemValue}
+                onChange={(e) => setRedeemValue(e.target.value)}
+              />
 
               <button className="right-btn">REDEEM</button>
             </form>

@@ -21,9 +21,9 @@ contract Voucher {
         uint _date
         );
     
-   constructor()payable{
+    constructor()payable{
        
-   }
+    }
 
     mapping(address => mapping(uint => uint)) public coupons;
     mapping(uint => uint) public voucherPrice;
