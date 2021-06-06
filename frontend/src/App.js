@@ -8,7 +8,7 @@ import {
   find,
   create,
   redeem,
-  findredeemer,
+  usedvoucher,
   findall,
   check,
 } from "./functions/voucher";
@@ -19,15 +19,17 @@ function App() {
   const [CurrentSigneraddress, setCurrentSigneraddress] = useState("0x0000");
   const [CurrentSignerBalance, setCurrentSignerBalance] = useState(0);
   const [foundVouchers, setFoundVouchers] = useState([]);
-  const [foundRedeemer, setFoundRedeemerVouchers] = useState([]);
+  const [foundUsedVouchers, setUsedVouchers] = useState([]);
   const [nameValue, setNameValue] = useState("");
   const [voucherValue, setVoucherValue] = useState("");
   const [redeemValue, setRedeemValue] = useState("");
+  const [redeemAddressValue, setredeemAddressValue] = useState("");
 
   useEffect(() => {
     loadData();
     findallVouchers();
-    findallVouchersRedeemed();
+    // findallVouchersRedeemed();
+    findused();
   }, [CurrentSigneraddress]);
 
   //checks if account was changed in metamask and reloads after 100ms
@@ -39,19 +41,19 @@ function App() {
     });
   }
 
-  //find all vouchers created by this current admin/signer
+  //find all vouchers
 
   const findallVouchers = () => {
-    findall(CurrentSigneraddress).then((res) => {
+    findall().then((res) => {
       setFoundVouchers(res.data);
     });
   };
 
   // find all vouchers redeemed by this address/user
 
-  const findallVouchersRedeemed = () => {
-    findredeemer(CurrentSigneraddress).then((res) => {
-      setFoundRedeemerVouchers(res.data);
+  const findused = () => {
+    usedvoucher().then((res) => {
+      setUsedVouchers(res.data);
     });
   };
 
@@ -72,7 +74,7 @@ function App() {
       } else if (res.data.message === "voucher not found") {
         return toast.error("Voucher is invalid");
       }
-      redeemVoucher(voucherName);
+      redeemVoucher(voucherName, redeemAddressValue);
     });
   };
 
@@ -99,8 +101,11 @@ function App() {
 
   //Redeem Voucher
 
-  const redeemVoucher = async (voucherName) => {
-    const txResponse = await contract.reedemVoucher(voucherName);
+  const redeemVoucher = async (voucherName, redeemAddressValue) => {
+    const txResponse = await contract.reedemVoucher(
+      voucherName,
+      redeemAddressValue
+    );
     const txReceipt = await txResponse.wait();
 
     contract.on("VoucherReedeemed", async (voucher, value, reedeemer, date) => {
@@ -123,25 +128,44 @@ function App() {
 
   const handleCreateVoucher = (e) => {
     e.preventDefault();
-    createVoucherCheck(nameValue, voucherValue);
+    createVoucherCheck(nameValue.toUpperCase(), voucherValue);
     setVoucherValue("");
     setNameValue("");
   };
 
   const handleRedeem = (e) => {
     e.preventDefault();
-    redeemVoucherCheck(redeemValue);
+    redeemVoucherCheck(redeemValue.toUpperCase(), redeemAddressValue);
     setRedeemValue("");
+    setredeemAddressValue("");
   };
 
   const loadData = async () => {
     if (window.ethereum) {
       await window.ethereum.enable();
+      // const provider = new ethers.providers.InfuraProvider(
+      //   "ropsten",
+      //   "79a5eceb797f4ddbb6dba41258ac230c"
+      // );
+
+      // const signer = new ethers.Wallet(
+      //   "239201d7b1a1874c674dc8f1d94bacc6d5a7846fc710ef7e592230c691c7bd7b",
+      //   provider
+      // );
+
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
-      const address = Voucher.networks["5777"].address;
+      const address = Voucher.networks[window.ethereum.networkVersion].address;
 
       const voucherContract = new ethers.Contract(address, Voucher.abi, signer);
+      console.log(signer);
+
+      // const txResponse = await voucherContract.createVoucher(100, 123);
+      // const txReceipt = await txResponse.wait();
+      // console.log(txReceipt);
+
+      // const balance = await voucherContract.balanceOf();
+      // console.log(parseInt(balance._hex));
 
       const balance = signer.getBalance().then((res) => {
         const finalBalance = parseInt(res._hex);
@@ -157,20 +181,16 @@ function App() {
     }
   };
 
+  console.log(CurrentSignerBalance);
+
   return (
     <>
       <ToastContainer />
       <div className="app">
         <div className="left">
           <h1>Voucher</h1>
-          <h2>
-            Current Creator's address:
-            <span className="address"> {CurrentSigneraddress}</span>
-            <br />
-            Balance: <span className="address">{CurrentSignerBalance}ETH</span>
-          </h2>
           <div className="vouchers-created">
-            <h2>Vouchers Created by this address</h2>
+            <h2>Vouchers Created</h2>
             <ul>
               {foundVouchers &&
                 foundVouchers.map((foundVoucher) => (
@@ -187,7 +207,7 @@ function App() {
               <label>VOUCHER NAME</label>
               <input
                 className="left-input"
-                type="number"
+                type="text"
                 required
                 value={nameValue}
                 onChange={(e) => setNameValue(e.target.value)}
@@ -211,17 +231,11 @@ function App() {
         </div>
         <div className="right">
           <h1>Dapp</h1>
-          <h2>
-            Current Redeemer's address:
-            <span className="address">{CurrentSigneraddress}</span>
-            <br />
-            Balance: <span className="address">{CurrentSignerBalance}ETH</span>
-          </h2>
           <div className="vouchers-redeemed">
-            <h2>Vouchers Redeemed by this address</h2>
+            <h2>Used Vouchers</h2>
             <ul>
-              {foundRedeemer &&
-                foundRedeemer.map((foundvoucher) => (
+              {foundUsedVouchers &&
+                foundUsedVouchers.map((foundvoucher) => (
                   <li key={foundvoucher._id}>Name: {foundvoucher.name}</li>
                 ))}
             </ul>
@@ -232,9 +246,16 @@ function App() {
               <label>VOUCHER NAME</label>
               <input
                 className="right-input"
-                type="number"
+                type="text"
                 value={redeemValue}
                 onChange={(e) => setRedeemValue(e.target.value)}
+              />
+              <label>ETH Address</label>
+              <input
+                className="right-input"
+                type="string"
+                value={redeemAddressValue}
+                onChange={(e) => setredeemAddressValue(e.target.value)}
               />
 
               <button className="right-btn">REDEEM</button>

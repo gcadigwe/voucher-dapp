@@ -229,6 +229,7 @@
 .vouchers-redeemed > ul {
   display: flex;
   font-size: small;
+  flex-direction: column;
 }
 
 .vouchers-redeemed ul li {
