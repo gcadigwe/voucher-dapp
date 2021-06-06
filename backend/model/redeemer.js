@@ -7,7 +7,7 @@ const redeemSchema = new mongoose.Schema(
       type: String,
     },
     name: {
-      type: Number,
+      type: String,
     },
   },
   { timestamps: true }

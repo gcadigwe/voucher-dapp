@@ -1,0 +1,242 @@
+@import url("https://fonts.googleapis.com/css2?family=Mulish:wght@500&display=swap");
+
+.app {
+  display: flex;
+}
+
+.left {
+  position: relative;
+  background-color: #f9ce5b;
+  min-width: 50%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.left > h1 {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  margin: 0;
+}
+
+.left > h2 {
+  position: absolute;
+  top: 50px;
+  font-size: small;
+}
+
+.left-input-container {
+  position: absolute;
+  top: 400px;
+  border-radius: 15px;
+  background-color: #fce299;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 400px;
+  height: 400px;
+  padding: 10px;
+}
+
+.left-input-container > h2 {
+  margin-bottom: 40px;
+}
+
+.left-form {
+  display: flex;
+
+  flex-direction: column;
+}
+
+.left-form > label {
+  font-family: "Mulish", sans-serif;
+  font-size: small;
+  font-weight: 100;
+  margin: 5px;
+}
+
+.left-input {
+  border: none;
+  width: 220px;
+  height: 30px;
+  border-radius: 10px;
+  box-shadow: -2px 9px 7px -3px rgba(244, 181, 30, 0.52);
+  /* border-bottom: 20px; */
+  margin-bottom: 10px;
+}
+
+.left-input:focus {
+  outline: none;
+}
+
+.left-btn {
+  height: 40px;
+  border: none;
+  border-radius: 10px;
+  margin-top: 60px;
+  background-color: #f9ce5b;
+  cursor: pointer;
+  box-shadow: 1px 3px 7px 3px rgba(0, 0, 0, 0.2);
+}
+
+.left-btn:focus {
+  outline: none;
+}
+
+.right {
+  position: relative;
+  background-color: #274150;
+  min-width: 50%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.right > h1 {
+  position: absolute;
+  top: 0;
+  left: 5px;
+  color: #fff;
+  margin: 0;
+}
+
+.right > h2 {
+  position: absolute;
+  top: 50px;
+  font-size: small;
+  color: #fff;
+}
+
+.right-input-container {
+  position: absolute;
+  top: 400px;
+  border-radius: 15px;
+  background-color: #51758b;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 400px;
+  height: 400px;
+  padding: 10px;
+}
+
+.right-input-container > h2 {
+  margin-bottom: 40px;
+  color: #fff;
+}
+
+.right-form {
+  display: flex;
+
+  flex-direction: column;
+}
+
+.right-form > label {
+  font-family: "Mulish", sans-serif;
+  font-size: small;
+  font-weight: 100;
+  margin: 5px;
+  color: #e0fcfb;
+}
+
+.right-input {
+  border: none;
+  width: 220px;
+  height: 30px;
+  border-radius: 10px;
+  background-color: #e0fcfb;
+  /* box-shadow: -2px 9px 7px -3px rgba(244, 181, 30, 0.52); */
+  /* border-bottom: 20px; */
+  margin-bottom: 10px;
+}
+
+.right-input:focus {
+  outline: none;
+}
+
+.right-btn {
+  height: 40px;
+  border: none;
+  border-radius: 10px;
+  margin-top: 25px;
+  background-color: #274150;
+  cursor: pointer;
+  box-shadow: 1px 3px 7px 3px rgba(0, 0, 0, 0.2);
+  color: #fff;
+}
+
+.right-btn:focus {
+  outline: none;
+}
+
+/*new feature */
+.vouchers-created {
+  background-color: #fce299;
+  position: absolute;
+  top: 150px;
+  width: 400px;
+  height: 200px;
+  padding: 5px;
+  border-radius: 15px;
+}
+
+.vouchers-created > h2 {
+  font-size: 1rem;
+}
+
+.vouchers-created > h2 {
+  text-align: center;
+  padding: 3px;
+}
+
+.vouchers-created > ul {
+  display: flex;
+  font-size: small;
+  flex-direction: column;
+}
+
+.vouchers-created ul li {
+  list-style-type: none;
+  margin-top: 2px;
+}
+
+.vouchers-redeemed {
+  background-color: #51758b;
+  position: absolute;
+  top: 150px;
+  width: 400px;
+  height: 200px;
+  padding: 5px;
+  color: #fff;
+  border-radius: 15px;
+}
+
+.vouchers-redeemed > h2 {
+  font-size: 1rem;
+}
+
+.vouchers-redeemed > h2 {
+  text-align: center;
+  padding: 3px;
+}
+
+.vouchers-redeemed > ul {
+  display: flex;
+  font-size: small;
+  flex-direction: column;
+}
+
+.vouchers-redeemed ul li {
+  list-style-type: none;
+  margin-right: 25px;
+}
+
+.address {
+  font-size: 1rem;
+}

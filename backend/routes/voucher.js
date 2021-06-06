@@ -5,16 +5,16 @@ const {
   create,
   redeem,
   find,
-  findVoucherCreatedByCurrentCreator,
-  findVoucherRedeemedByCurrentRedeemer,
+  getAllVouchers,
+  findUsedVouchers,
   checkUsedVoucher,
 } = require("../controller/voucher");
 
 router.post("/voucher/create", create);
 router.post("/voucher/redeem", redeem);
 router.post("/voucher/find", find);
-router.post("/voucher/findall", findVoucherCreatedByCurrentCreator);
-router.post("/voucher/findredeemer", findVoucherRedeemedByCurrentRedeemer);
+router.get("/voucher/findall", getAllVouchers);
+router.get("/voucher/findused", findUsedVouchers);
 router.post("/voucher/check", checkUsedVoucher);
 
 module.exports = router;

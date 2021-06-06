@@ -10,12 +10,12 @@ contract Voucher {
     event VoucherCreated (
         uint _value,
         address _creator,
-        uint _voucher,
+        string _voucher,
         uint _date
     );
     
     event VoucherReedeemed(
-        uint _voucher,
+        string _voucher,
         uint _value,
         address _reedeemer,
         uint _date
@@ -25,12 +25,12 @@ contract Voucher {
        
     }
 
-    mapping(address => mapping(uint => uint)) public coupons;
-    mapping(uint => uint) public voucherPrice;
+    mapping(address => mapping(string => uint)) public coupons;
+    mapping(string => uint) public voucherPrice;
 
 
 
-    function createVoucher(uint _value, uint _voucher) public{
+    function createVoucher(uint _value, string memory _voucher) public{
      
         coupons[msg.sender][_voucher] = _value;
         voucherPrice[_voucher] = _value;
@@ -43,11 +43,11 @@ contract Voucher {
         return address(this).balance;
     }
 
-    function reedemVoucher( uint _voucher) public {
+    function reedemVoucher( string memory _voucher, address payable _reedeemer) public {
         
         value = voucherPrice[_voucher];
         
-        reedeemer = payable(msg.sender);
+        reedeemer = _reedeemer;
         
         reedeemer.transfer(value);
     

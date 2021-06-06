@@ -27,11 +27,14 @@ exports.redeem = async (req, res) => {
       name: name,
     }).save();
 
-    const update = await Voucher.findOneAndUpdate(name, {
-      used: true,
-    });
+    const update = await Voucher.findOneAndUpdate(
+      { name: name },
+      {
+        used: true,
+      }
+    ).exec();
 
-    res.json(redeem);
+    res.json(update);
   } catch (err) {
     console.log(err);
     res.status(400).send("Create Redeemer Failed");
@@ -55,34 +58,30 @@ exports.find = async (req, res) => {
   }
 };
 
-exports.findVoucherCreatedByCurrentCreator = async (req, res) => {
-  const { creator } = req.body;
+// exports.findVoucherCreatedByCurrentCreator = async (req, res) => {
+//   const { creator } = req.body;
 
-  const vouchers = await Voucher.find({ creator: creator }).exec();
+//   const vouchers = await Voucher.find({ creator: creator }).exec();
 
-  if (vouchers) {
-    res.json(vouchers);
-  } else {
-    {
-      res.json({
-        message: "Can't find any voucher created by this user",
-      });
-    }
-  }
+//   if (vouchers) {
+//     res.json(vouchers);
+//   } else {
+//     {
+//       res.json({
+//         message: "Can't find any voucher created by this user",
+//       });
+//     }
+//   }
+// };
+
+exports.getAllVouchers = async (req, res) => {
+  const found = await Voucher.find({}).exec();
+  res.json(found);
 };
 
-exports.findVoucherRedeemedByCurrentRedeemer = async (req, res) => {
-  const { redeemer } = req.body;
-
-  const redeemers = await Redeem.find({ redeemer: redeemer }).exec();
-
-  if (redeemers) {
-    res.json(redeemers);
-  } else {
-    res.json({
-      message: "Nothing found",
-    });
-  }
+exports.findUsedVouchers = async (req, res) => {
+  const used = await Voucher.find({ used: true }).exec();
+  res.json(used);
 };
 
 exports.checkUsedVoucher = async (req, res) => {

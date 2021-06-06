@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const morgan = require("morgan");
+const path = require("path");
 const bodyParse = require("body-parser");
 const cors = require("cors");
 const fs = require("fs");
@@ -10,15 +11,12 @@ require("dotenv").config();
 const app = express();
 
 mongoose
-  .connect(
-    "mongodb+srv://sarzy-ecom:salzkid24@ecom.isgtu.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
-    {
-      useUnifiedTopology: true,
-      useCreateIndex: true,
-      useNewUrlParser: true,
-      useFindAndModify: false,
-    }
-  )
+  .connect(process.env.MONGO_URI, {
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useNewUrlParser: true,
+    useFindAndModify: false,
+  })
   .then(() => console.log("DB Connected"));
 
 mongoose.connection.on("error", (err) => {
@@ -37,8 +35,19 @@ fs.readdirSync("./routes").map((r) => {
 });
 
 //connecting port
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "/frontend/build")));
 
-const port = process.env.PORT || 8000;
+  app.use("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "frontend", "build", "index.html"));
+  });
+} else {
+  app.get("/", (req, res) => {
+    res.send("Api running");
+  });
+}
+
+const port = process.env.PORT;
 
 app.listen(port, () => {
   console.log(`App is running on port ${port}`);

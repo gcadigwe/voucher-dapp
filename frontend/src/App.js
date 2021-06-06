@@ -30,7 +30,7 @@ function App() {
     findallVouchers();
     // findallVouchersRedeemed();
     findused();
-  }, [CurrentSigneraddress]);
+  }, []);
 
   //checks if account was changed in metamask and reloads after 100ms
   if (window.ethereum) {
@@ -64,6 +64,7 @@ function App() {
       }
 
       createVoucher(voucherName, voucherValue);
+      console.log("got here");
     });
   };
 
@@ -74,6 +75,7 @@ function App() {
       } else if (res.data.message === "voucher not found") {
         return toast.error("Voucher is invalid");
       }
+
       redeemVoucher(voucherName, redeemAddressValue);
     });
   };
@@ -81,7 +83,10 @@ function App() {
   //Create Voucher
   const createVoucher = async (voucherName, voucherValue) => {
     const finalValue = ethers.utils.parseEther(voucherValue);
-    const txResponse = await contract.createVoucher(finalValue, voucherName);
+    const txResponse = await contract.functions.createVoucher(
+      finalValue,
+      voucherName
+    );
     const txReceipt = await txResponse.wait();
 
     contract.on("VoucherCreated", async (value, creator, voucher, date) => {
@@ -102,7 +107,7 @@ function App() {
   //Redeem Voucher
 
   const redeemVoucher = async (voucherName, redeemAddressValue) => {
-    const txResponse = await contract.reedemVoucher(
+    const txResponse = await contract.functions.reedemVoucher(
       voucherName,
       redeemAddressValue
     );
@@ -143,22 +148,25 @@ function App() {
   const loadData = async () => {
     if (window.ethereum) {
       await window.ethereum.enable();
-      // const provider = new ethers.providers.InfuraProvider(
-      //   "ropsten",
-      //   "79a5eceb797f4ddbb6dba41258ac230c"
-      // );
+      const provider = new ethers.providers.InfuraProvider(
+        "ropsten",
+        "0c41bc9d34ee4c46bdcd260bc6eab9fb"
+      );
 
-      // const signer = new ethers.Wallet(
-      //   "239201d7b1a1874c674dc8f1d94bacc6d5a7846fc710ef7e592230c691c7bd7b",
-      //   provider
-      // );
-
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
       const address = Voucher.networks[window.ethereum.networkVersion].address;
+
+      const signer = new ethers.Wallet(
+        "239201d7b1a1874c674dc8f1d94bacc6d5a7846fc710ef7e592230c691c7bd7b",
+        provider
+      );
 
       const voucherContract = new ethers.Contract(address, Voucher.abi, signer);
       console.log(signer);
+
+      setContract(voucherContract);
+
+      // const provider = new ethers.providers.Web3Provider(window.ethereum);
+      // const signer = provider.getSigner();
 
       // const txResponse = await voucherContract.createVoucher(100, 123);
       // const txReceipt = await txResponse.wait();
@@ -173,14 +181,13 @@ function App() {
         setCurrentSignerBalance(etherString);
       });
 
-      const CurrentSigneraddress = signer.getAddress().then((res) => {
-        setCurrentSigneraddress(res);
-      });
-
-      setContract(voucherContract);
+      // const CurrentSigneraddress = signer.getAddress().then((res) => {
+      //   setCurrentSigneraddress(res);
+      // });
     }
   };
 
+  console.log(contract);
   console.log(CurrentSignerBalance);
 
   return (
